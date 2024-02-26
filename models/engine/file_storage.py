@@ -7,7 +7,7 @@ Create FileStorage class
 
 class FileStorage:
     def __init__(self):
-        self.__file_path = "file.json"
+        self.__file_path = ""
         self.__objects = {}
   
     def all(self):

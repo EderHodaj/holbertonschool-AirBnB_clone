@@ -8,8 +8,8 @@ class BaseModel:
     '''Createing the class attributes'''
     def __init__(self):
         self.id = str(uuid.uuid4())
-        self.created_at = str(datetime.datetime.now().isoformat())
-        self.updated_at = str(datetime.datetime.now().isoformat())
+        self.created_at = datetime.datetime.now().isoformat()
+        self.updated_at = datetime.datetime.now().isoformat()
 
     def __str__(self):
         return f"[BaseModel] ({self.id}) {self.__dict__}"

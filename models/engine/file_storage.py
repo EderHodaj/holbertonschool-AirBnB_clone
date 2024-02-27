@@ -28,18 +28,7 @@ class FileStorage:
             json_dict[key] = value.to_dict()
         with open(FileStorage.__file_path, "w") as json_file:
             json.dump(json_dict, json_file)
-'''
-    def reload(self):
-        """deserializes dictionaries from json file"""
-        try:
-            with open(FileStorage.__file_path, "r") as json_file:
-                from_json = json.load(json_file)
-                for key, value in from_json.items():
-                    cls_name = eval(value["__class__"])(**value)
-                    self.__objects[key] = cls_name
-        except FileNotFoundError:
-            return
-'''
+
     def reload(self):
         """deserializes the JSON file to __objects
         (only if the JSON file (__file_path) exists;

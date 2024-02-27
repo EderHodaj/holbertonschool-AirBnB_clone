@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 import uuid
 import datetime
-from __init__ import storage
-
+import models
 '''Create Base Classe'''
 
 
@@ -17,16 +16,17 @@ class BaseModel:
                     value = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
                 setattr(self,key,value)
         else:
-            storage.new()
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
+            models.storage.new(self)
+            
 
     def __str__(self):
         return f"[BaseModel] ({self.id}) {self.__dict__}"
 
     def save(self):
         self.updated_at = datetime.datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         self.created_at = datetime.datetime.now().isoformat()

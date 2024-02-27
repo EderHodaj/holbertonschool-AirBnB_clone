@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import json
 from models.base_model import BaseModel
+import os
 '''
 Create FileStorage class
 '''
@@ -30,15 +31,12 @@ class FileStorage:
             json.dump(json_dict, json_file)
 
     def reload(self):
-        """deserializes the JSON file to __objects
-        (only if the JSON file (__file_path) exists;
-        otherwise, do nothing. If the file doesnt exist,
-        no exception should be raised)
-        """
-        try:
-            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
-                for key, value in (json.load(f)).items():
-                    value = eval(value["__class__"])(**value)
-                    self.__objects[key] = value
-        except Exception:
+        """deserializes dictionaries from json file"""
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, "r") as json_file:
+                from_json = json.load(json_file)
+                for key, value in from_json.items():
+                    cls_name = eval(value["__class__"])(**value)
+                    self.__objects[key] = cls_name
+        else:
             pass

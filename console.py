@@ -1,35 +1,26 @@
 #!/usr/bin/python3
-"""module about a cmd"""
-
+"""Defines the HBnB console."""
 import cmd
 
-
 class HBNBCommand(cmd.Cmd):
-    """class of cmd"""
+    """Defines the HolbertonBnB command interpreter"""
 
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
+
+    def emptyline(self):
+        """Do nothing upon receiving an empty line."""
+        pass
 
 
-    def quit(self, args):
-        """method to quit from cmd"""
+
+    def do_quit(self, arg):
+        """Quit command to exit the program."""
         exit()
 
-    def EOF(self, args):
-        """method to quit the program"""
+    def do_EOF(self, arg):
+        """EOF signal to exit the program."""
         print()
         exit()
 
-    def emptyline(self):
-        """method about behaviour when press enter"""
-        pass
-
-    def help_quit(self):
-        """method to implement help"""
-        print("command to exit program")
-
-    def help_EOF(self):
-        """method to implement help"""
-        print("command to exit program")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()

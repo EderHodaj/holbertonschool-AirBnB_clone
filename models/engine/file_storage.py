@@ -1,70 +1,48 @@
 #!/usr/bin/python3
-'''
-Module for file storage
-'''
 import json
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
-from models.amenity import Amenity
 from models.place import Place
+from models.amenity import Amenity
 from models.review import Review
+import os
+'''
+Create FileStorage class
+'''
 
 
 class FileStorage:
-    '''
-    Class for file storage
-    '''
+    """ class about storing objects to json file"""
+
     __file_path = "file.json"
     __objects = {}
-
+  
     def all(self):
-        '''
-        function that returns the dict of objects
-        '''
+        """return all key value pairs of the dictionary"""
         return FileStorage.__objects
 
     def new(self, obj):
-        '''
-        function to set obj in objects
-        '''
+        """adds a new object as a value to the dictionary"""
         key = f"{obj.__class__.__name__}.{obj.id}"
         FileStorage.__objects[key] = obj
-        return True
 
     def save(self):
-        '''
-        function to serialize objects to the json file
-        '''
-        obj_dictionary = {}
+        """serializes objects to json file"""
+        json_dict = {}
         for key, value in FileStorage.__objects.items():
-            obj_dictionary[key] = value.to_dict()
-        with open(FileStorage.__file_path, 'w') as f:
-            json.dump(obj_dictionary, f)
-        return True
+            json_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, "w") as json_file:
+            json.dump(json_dict, json_file)
 
     def reload(self):
-        '''
-        functiont to deserialize json files to objects
-        '''
-        try:
-            with open(FileStorage.__file_path, "r") as f:
-                data = json.load(f)
-                for key, value in data.items():
-                    cls_name, obj_id = key.split('.')
-                    obj = eval(cls_name)(**value)
-                    self.new(obj)
-            return True
-        except Exception as e:
-            return False
-
-    classes = {
-        'BaseModel': BaseModel,
-        'User': User,
-        'Place': Place,
-        'State': State,
-        'City': City,
-        'Amenity': Amenity,
-        'Review': Review
-    }
+        """deserializes dictionaries from json file"""
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, "r") as json_file:
+                from_json = json.load(json_file)
+                for key, value in from_json.items():
+                    cls_name = eval(value["__class__"])(**value)
+                    self.__objects[key] = cls_name
+        else:
+            pass

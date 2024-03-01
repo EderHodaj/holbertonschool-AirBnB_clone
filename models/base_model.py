@@ -32,5 +32,5 @@ class BaseModel:
     def to_dict(self):
         self.created_at = datetime.datetime.now().isoformat()
         self.updated_at = datetime.datetime.now().isoformat()
-        self.__dict__['__class__'] = 'BaseModel'
+        self.__dict__['__class__'] = self.__class__.__name__
         return self.__dict__

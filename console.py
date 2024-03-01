@@ -90,5 +90,67 @@ class HBNBCommand(cmd.Cmd):
             del objdict[f"{arglist[0]}.{arglist[1]}"]
             storage.save()
 
+    def do_all(self, arg):
+        """Display string representations of all instances of a given class.
+        If no class is specified, displays all instantiated objects."""
+        arglist = parse(arg)
+        if len(arglist) > 0 and arglist[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+        else:
+            objlist = []
+            for obj in storage.all().values():
+                if len(arglist) > 0 and arglist[0] == obj.__class__.__name__:
+                    objlist.append(obj.__str__())
+                elif len(arglist) == 0:
+                    objlist.append(obj.__str__())
+            print(objlist)
+
+    def do_update(self, arg):
+        """Update a class instance of a given id by adding or updating
+        a given attribute key/value pair or dictionary."""
+        arglist = parse(arg)
+        objdict = storage.all()
+
+        if len(arglist) == 0:
+            print("** class name missing **")
+            return False
+        if arglist[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return False
+        if len(arglist) == 1:
+            print("** instance id missing **")
+            return False
+        if f"{arglist[0]}.{arglist[1]}" not in objdict.keys():
+            print("** no instance found **")
+            return False
+        if len(arglist) == 2:
+            print("** attribute name missing **")
+            return False
+        if len(arglist) == 3:
+            try:
+                type(eval(arglist[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+
+        if len(arglist) == 4:
+            obj = objdict[f"{arglist[0]}.{arglist[1]}"]
+            if arglist[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[arglist[2]])
+                obj.__dict__[arglist[2]] = valtype(arglist[3])
+            else:
+                obj.__dict__[arglist[2]] = arglist[3]
+        elif type(eval(arglist[2])) == dict:
+            obj = objdict[f"{arglist[0]}.{arglist[1]}"]
+            for k, v in eval(arglist[2]).items():
+                if (k in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[k]) in {str, int, float}):
+                    valtype = type(obj.__class__.__dict__[k])
+                    obj.__dict__[k] = valtype(v)
+                else:
+                    obj.__dict__[k] = v
+        storage.save()
+
+
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

@@ -54,6 +54,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             new_obj = HBNBCommand.classes[arglist[0]]()
+            print(new_obj.id)
             storage.new(new_obj)
             storage.save()
 

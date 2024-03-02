@@ -1,5 +1,7 @@
 #!/usr/bin/python3
+
 """Defines the HBnB console."""
+
 import cmd
 import re
 from shlex import split
@@ -11,6 +13,7 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+
 
 def parse(arg):
     curly_braces = re.search(r"\{(.*?)\}", arg)
@@ -29,18 +32,25 @@ def parse(arg):
         retl.append(curly_braces.group())
         return retl
 
+
 class HBNBCommand(cmd.Cmd):
     """Defines the HolbertonBnB command interpreter"""
 
     prompt = "(hbnb) "
 
-    classes = {"BaseModel":BaseModel, "User":User, "State":State, "City":City, "Place":Place, "Amenity":Amenity, "Review":Review}
+    classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Place": Place,
+        "Amenity": Amenity,
+        "Review": Review
+    }
 
     def emptyline(self):
         """Do nothing upon receiving an empty line."""
         pass
-
-
 
     def do_quit(self, arg):
         """Quit command to exit the program."""
@@ -64,9 +74,8 @@ class HBNBCommand(cmd.Cmd):
             storage.new(new_obj)
             storage.save()
 
-    
     def do_show(self, arg):
-        """Display the string representation of a class instance of a given id"""
+        """Display the string representation of a class instance"""
         arglist = parse(arg)
         objdict = storage.all()
         if len(arglist) == 0:
@@ -80,7 +89,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             print(objdict[f"{arglist[0]}.{arglist[1]}"])
 
-    
     def do_destroy(self, arg):
         """Delete a class instance of a given id"""
         arglist = parse(arg)

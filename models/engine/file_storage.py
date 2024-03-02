@@ -18,7 +18,7 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
-  
+
     def all(self):
         """return all key value pairs of the dictionary"""
         return FileStorage.__objects
